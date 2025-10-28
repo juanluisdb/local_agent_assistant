@@ -1,7 +1,8 @@
-from os import name
+import json
+
 import litellm
 from litellm.types.utils import Message
-import json
+
 from .tool import Tool
 
 
