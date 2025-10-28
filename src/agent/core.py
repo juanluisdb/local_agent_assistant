@@ -1,4 +1,6 @@
+from os import name
 import litellm
+from litellm.types.utils import Message
 import json
 from .tool import Tool
 
@@ -8,23 +10,23 @@ class Agent:
         self.model_name = model_name
         self.system_prompt = system_prompt
         self.tools = {tool.name: tool for tool in tools}
+        self.messages = [
+            Message(role="system", content=system_prompt)
+        ]
     
     async def run(self, user_input: str):
         # Simplified interaction loop
-        messages = [
-            {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": user_input}
-        ]
+        self.messages.append(Message(role="user", content=user_input))
         
         while True:
             response = await litellm.acompletion(
                 model=self.model_name,
-                messages=messages,
+                messages=[msg.model_dump() for msg in self.messages],
                 tools=[tool.to_openai_format() for tool in self.tools.values()],
             )
             
             message = response.choices[0].message
-            messages.append(message.dict())
+            self.messages.append(message)
             yield message
             if not message.tool_calls:
                 break
@@ -37,13 +39,13 @@ class Agent:
                 tool = self.tools[tool_name]
                 tool_result = await tool.execute(tool_args)
                 
-                tool_message = {
-                    "role": "tool",
-                    "name": tool_name,
-                    "tool_call_id": tool_call_id,
-                    "content": tool_result
-                }
-                messages.append(tool_message)
+                tool_message = Message(
+                    role="tool",
+                    content=tool_result,
+                    tool_call_id=tool_call_id,
+                    name=tool_name
+                )
+                self.messages.append(tool_message)
                 yield tool_message
 
 
