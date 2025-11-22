@@ -17,7 +17,7 @@ class SearchTool(Tool):
         self.client = AsyncTavilyClient(api_key=api_key)
         self.max_results = max_results
 
-    async def execute(self, input_params: dict) -> str:
+    async def _execute(self, input_params: dict) -> str:
         params = SearchToolInput.model_validate(input_params)
         results = await self.client.search(params.query, max_results=self.max_results)
 

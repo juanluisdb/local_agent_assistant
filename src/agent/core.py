@@ -16,7 +16,6 @@ class Agent:
         ]
     
     async def run(self, user_input: str):
-        # Simplified interaction loop
         self.messages.append(Message(role="user", content=user_input))
         
         while True:

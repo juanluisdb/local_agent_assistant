@@ -9,7 +9,7 @@ from src.settings import settings
 
 async def main():
     agent = Agent(
-        model_name="openrouter/qwen/qwen3-coder-30b-a3b-instruct",
+        model_name="openrouter/openai/gpt-oss-120b:exacto",
         system_prompt="You are a helpful assistant.",
         tools=[
             SearchTool(settings.TAVILY_API_KEY),

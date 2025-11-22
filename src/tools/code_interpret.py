@@ -15,7 +15,7 @@ class CodeInterpretTool(Tool):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    async def execute(self, input_params: dict) -> str:
+    async def _execute(self, input_params: dict) -> str:
         params = CodeInterpretToolInput.model_validate(input_params)
 
         with Sandbox.create(api_key=self.api_key) as sandbox:

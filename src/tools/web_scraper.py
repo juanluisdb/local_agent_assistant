@@ -16,7 +16,7 @@ class WebScraperTool(Tool):
     def __init__(self, api_key: str):
         self.client = AsyncTavilyClient(api_key=api_key)
 
-    async def execute(self, input_params: dict) -> str:
+    async def _execute(self, input_params: dict) -> str:
         params = WebScraperToolInput.model_validate(input_params)
         results = await self.client.extract(urls=[str(params.url)])
 
