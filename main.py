@@ -3,6 +3,7 @@ import asyncio
 from src.agent.core import Agent
 from src.tools.search import SearchTool
 from src.tools.code_interpret import CodeInterpretTool
+from src.tools.web_scraper import WebScraperTool
 from src.settings import settings
 
 
@@ -13,10 +14,11 @@ async def main():
         tools=[
             SearchTool(settings.TAVILY_API_KEY),
             CodeInterpretTool(settings.E2B_API_KEY),
+            WebScraperTool(settings.TAVILY_API_KEY),
         ],
     )
 
-    async for response in agent.run("use code interpret to calculate 1234 * 3678"):
+    async for response in agent.run("summarize the wikipedia page for Jerez de la Frontera"):
         print(response)
         print("-" * 40)
 
