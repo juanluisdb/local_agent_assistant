@@ -3,11 +3,10 @@ from pydantic import BaseModel, Field
 
 from tavily import AsyncTavilyClient
 
-
 from src.agent.tool import Tool
 
 class SearchToolInput(BaseModel):
-    query: str = Field(description="The search query string", min_length=1, strip_whitespace=True)
+    query: str = Field(description="The search query string", min_length=1)
 
 class SearchTool(Tool):
     name = "search"
