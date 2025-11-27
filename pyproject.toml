@@ -6,8 +6,16 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "e2b-code-interpreter>=2.2.1",
+    "fastapi[standard]>=0.122.0",
     "litellm>=1.79.0",
     "pydantic>=2.12.3",
     "pydantic-settings>=2.11.0",
+    "sse-starlette>=3.0.3",
     "tavily-python>=0.7.12",
+    "uvicorn>=0.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.6",
 ]

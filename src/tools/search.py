@@ -5,12 +5,16 @@ from tavily import AsyncTavilyClient
 
 from src.agent.tool import Tool
 
+
 class SearchToolInput(BaseModel):
     query: str = Field(description="The search query string", min_length=1)
 
+
 class SearchTool(Tool):
     name = "search"
-    description = "A tool searches the web for a given query and returns relevant results."
+    description = (
+        "A tool searches the web for a given query and returns relevant results."
+    )
     input_model = SearchToolInput
 
     def __init__(self, api_key: str, max_results: int = 10):

@@ -5,8 +5,10 @@ from tavily import AsyncTavilyClient
 
 from src.agent.tool import Tool
 
+
 class WebScraperToolInput(BaseModel):
     url: HttpUrl = Field(description="The URL to scrape content from")
+
 
 class WebScraperTool(Tool):
     name = "web_scraper"
@@ -21,4 +23,3 @@ class WebScraperTool(Tool):
         results = await self.client.extract(urls=[str(params.url)])
 
         return json.dumps(results, indent=2)
-    

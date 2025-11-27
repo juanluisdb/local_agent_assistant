@@ -4,8 +4,10 @@ from e2b_code_interpreter import Sandbox
 
 from src.agent.tool import Tool
 
+
 class CodeInterpretToolInput(BaseModel):
     code: str = Field(description="The Python code to run", min_length=1)
+
 
 class CodeInterpretTool(Tool):
     name = "code_interpret"
@@ -21,5 +23,3 @@ class CodeInterpretTool(Tool):
         with Sandbox.create(api_key=self.api_key) as sandbox:
             execution = sandbox.run_code(params.code)
             return str(execution)
-
-        
