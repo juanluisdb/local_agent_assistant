@@ -21,6 +21,7 @@ class ToolResultEvent(BaseModel):
     id: str
     tool_name: str
     tool_output: str
+    success: bool
 
 
 class ThinkingEvent(BaseModel):

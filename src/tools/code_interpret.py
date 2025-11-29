@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 
 from e2b_code_interpreter import Sandbox
+import json
 
 from src.agent.tool import Tool
 
@@ -17,9 +18,9 @@ class CodeInterpretTool(Tool):
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    async def _execute(self, input_params: dict) -> str:
-        params = CodeInterpretToolInput.model_validate(input_params)
-
+    async def _execute(self, input_params: str) -> str:
+        parsed = json.loads(input_params)
+        params = CodeInterpretToolInput.model_validate(parsed)
         with Sandbox.create(api_key=self.api_key) as sandbox:
             execution = sandbox.run_code(params.code)
             return str(execution)

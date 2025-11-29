@@ -1,17 +1,12 @@
-import json
-
+import asyncio
 import litellm
 from litellm.types.utils import Message
+from typing import Any, AsyncIterator
 
-from src.models.events import (
-    AgentEvent,
-    ToolCallEvent,
-    ToolResultEvent,
-    ThinkingEvent,
-    AnswerEvent,
-)
+from src.models.events import AgentEvent, ToolCallEvent, ToolResultEvent
 
 from .tool import Tool
+from .streaming import StreamAccumulator
 
 
 class Agent:
@@ -30,44 +25,63 @@ class Agent:
                 model=self.model_name,
                 messages=[msg.model_dump() for msg in messages],
                 tools=[tool.to_openai_format() for tool in self.tools.values()],
-                stream=False,
+                stream=True,
             )
 
-            message = response.choices[0].message
-            messages.append(message)
+            acc = StreamAccumulator()
+            stream_iter: AsyncIterator[Any] = response  # type: ignore
+            async for chunk in stream_iter:
+                for e in acc.accumulate(chunk.choices[0].delta):
+                    yield e
 
-            if message.reasoning_content:
-                yield ThinkingEvent(content=message.reasoning_content)
-            if message.content:
-                yield AnswerEvent(content=message.content)
+            final_msg, tool_calls = acc.finalize()
+            messages.append(final_msg)
 
-            if not message.tool_calls:
+            # If the ai finished and didn't produce any tool calls, stop the loop
+            if not tool_calls:
                 break
 
-            for tool_call in message.tool_calls:
-                tool_name = tool_call.function.name
-                tool_args = json.loads(tool_call.function.arguments)
-                tool_call_id = tool_call.id
+            # Emit ToolCallEvent for each tool call and prepare to execute
+            executable_calls = []
+            for tc in tool_calls:
+                if not tc.name or tc.name not in self.tools:
+                    err = f"Unknown tool: {tc.name}"
+                    messages.append(
+                        Message(
+                            role="tool",
+                            content=err,
+                            tool_call_id=tc.id,
+                            name=tc.name,
+                        )
+                    )
+                    yield ToolResultEvent(
+                        id=tc.id,
+                        tool_name=tc.name,
+                        tool_output=err,
+                        success=False,
+                    )
+                    continue
 
-                yield ToolCallEvent(
-                    id=tool_call_id,
-                    tool_name=tool_name,
-                    tool_input=tool_call.function.arguments,
-                )
+                yield ToolCallEvent(id=tc.id, tool_name=tc.name, tool_input=tc.raw_args)
+                executable_calls.append((tc.id, tc.name, tc.raw_args))
 
-                tool = self.tools[tool_name]
-                tool_result = await tool.execute(tool_args)
+            # Execute tools concurrently using asyncio.gather
+            tasks = [
+                asyncio.create_task(self.tools[name].execute(call_id, raw_args))
+                for call_id, name, raw_args in executable_calls
+            ]
+            if tasks:
+                results = await asyncio.gather(*tasks)
+                for result_event in results:
+                    # Tool.execute always returns ToolResultEvent, so we can yield it directly
+                    messages.append(
+                        Message(
+                            role="tool",
+                            content=result_event.tool_output,
+                            tool_call_id=result_event.id,
+                            name=result_event.tool_name,
+                        )
+                    )
+                    yield result_event
 
-                tool_message = Message(
-                    role="tool",
-                    content=tool_result,
-                    tool_call_id=tool_call_id,
-                    name=tool_name,
-                )
-                messages.append(tool_message)
-
-                yield ToolResultEvent(
-                    id=tool_call_id,
-                    tool_name=tool_name,
-                    tool_output=tool_result,
-                )
+            continue
