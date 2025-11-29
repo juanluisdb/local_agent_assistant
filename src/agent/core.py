@@ -14,11 +14,15 @@ class Agent:
         self.model_name = model_name
         self.system_prompt = system_prompt
         self.tools = {tool.name: tool for tool in tools}
-
-    async def run(self, user_input: str, messages: list[Message] | None = None):
+    
+    def _init_messages(self, user_input: str, messages: list[Message] | None = None) -> list[Message]:
         if not messages:
             messages = [Message(role="system", content=self.system_prompt)]
         messages.append(Message(role="user", content=user_input))
+        return messages
+
+    async def run(self, user_input: str, messages: list[Message] | None = None):
+        messages = self._init_messages(user_input, messages)
 
         while True:
             response = await litellm.acompletion(
@@ -83,5 +87,3 @@ class Agent:
                         )
                     )
                     yield result_event
-
-            continue
