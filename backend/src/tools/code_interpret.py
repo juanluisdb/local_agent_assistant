@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 from e2b_code_interpreter import Sandbox
 import json
 
-from src.agent.tool import Tool
+from ..agent.tool import Tool
 
 
 class CodeInterpretToolInput(BaseModel):

@@ -4,7 +4,7 @@ from typing import List, Tuple
 from litellm.types.utils import Message, Delta
 from pydantic import BaseModel
 
-from src.models.events import ThinkingEvent, AnswerEvent
+from ..models.events import ThinkingEvent, AnswerEvent
 
 
 @dataclass
@@ -47,9 +47,11 @@ class StreamAccumulator:
         """
         events: List[ThinkingEvent | AnswerEvent] = []
 
-        if delta.reasoning_content:
-            self.reasoning += delta.reasoning_content
-            events.append(ThinkingEvent(content=delta.reasoning_content))
+        # Litellm delta doesn't include reasoning_content always
+        reasoning_content = getattr(delta, "reasoning_content", None)
+        if reasoning_content:
+            self.reasoning += reasoning_content
+            events.append(ThinkingEvent(content=reasoning_content))
 
         if delta.content:
             self.content += delta.content

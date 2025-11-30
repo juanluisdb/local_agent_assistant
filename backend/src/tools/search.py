@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 from tavily import AsyncTavilyClient
 
-from src.agent.tool import Tool
+from ..agent.tool import Tool
 
 
 class SearchToolInput(BaseModel):

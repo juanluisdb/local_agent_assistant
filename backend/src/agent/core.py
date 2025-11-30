@@ -3,7 +3,7 @@ import litellm
 from litellm.types.utils import Message
 from typing import Any, AsyncIterator
 
-from src.models.events import AgentEvent, ToolCallEvent, ToolResultEvent
+from ..models.events import ToolCallEvent, ToolResultEvent
 
 from .tool import Tool
 from .streaming import StreamAccumulator
@@ -14,8 +14,10 @@ class Agent:
         self.model_name = model_name
         self.system_prompt = system_prompt
         self.tools = {tool.name: tool for tool in tools}
-    
-    def _init_messages(self, user_input: str, messages: list[Message] | None = None) -> list[Message]:
+
+    def _init_messages(
+        self, user_input: str, messages: list[Message] | None = None
+    ) -> list[Message]:
         if not messages:
             messages = [Message(role="system", content=self.system_prompt)]
         messages.append(Message(role="user", content=user_input))

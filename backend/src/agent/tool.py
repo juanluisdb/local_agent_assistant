@@ -3,7 +3,7 @@ from typing import Dict, Any
 
 from pydantic import BaseModel
 
-from src.models.events import ToolResultEvent
+from ..models.events import ToolResultEvent
 
 
 class Tool(ABC):
