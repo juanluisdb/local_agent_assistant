@@ -1,120 +1,166 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/*
+ * Theme System
+ * ------------
+ * Themes are applied via data-theme attribute on <html>
+ * Usage: <html data-theme="paper-ink"> or <html data-theme="paper-ink-dark">
+ * 
+ * To add a new theme, copy the token structure and define new values.
+ */
+
 @custom-variant dark (&:is(.dark *));
 
+/* Tailwind v4 theme tokens - maps CSS vars to Tailwind utilities */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Core colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+
+  /* Interactive */
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
+
+  /* UI elements */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Semantic */
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+
+  /* Code blocks */
+  --color-code-bg: var(--code-bg);
+  --color-code-text: var(--code-text);
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+/* ==========================================================================
+   PAPER & INK THEME (Light) - Warm, natural, pseudo-vintage modern
+   ========================================================================== */
+
+:root,
+[data-theme='paper-ink'] {
+  --radius: 0.5rem;
+
+  /* Backgrounds */
+  --background: theme('colors.stone.50');
+  /* Warm cream #F5F1EB */
+  --foreground: theme('colors.stone.900');
+  /* Charcoal brown #3D3833 */
+  --surface: theme('colors.stone.200');
+  /* Soft parchment #EDE8E0 */
+  --surface-foreground: theme('colors.stone.900');
+
+  /* Interactive - Terracotta accent */
+  --primary: theme('colors.rose.400');
+  /* Terracotta / rose */
+  --primary-foreground: theme('colors.white');
+  --secondary: theme('colors.emerald.500');
+  /* Sage-esque green */
+  --secondary-foreground: theme('colors.white');
+  --accent: theme('colors.rose.400');
+  --accent-foreground: theme('colors.white');
+
+  /* UI elements */
+  --muted: theme('colors.stone.300');
+  /* Light warm gray */
+  --muted-foreground: theme('colors.stone.700');
+  /* Muted stone */
+  --border: theme('colors.stone.300');
+  /* Warm gray border */
+  --input: theme('colors.stone.50');
+  --ring: theme('colors.rose.400');
+  /* Matches primary */
+
+  /* Semantic */
+  --destructive: theme('colors.red.600');
+  /* Muted red */
+  --success: theme('colors.green.600');
+  /* Sage green */
+
+  /* Code blocks */
+  --code-bg: theme('colors.stone.100');
+  /* Soft sepia #F8F5F0 */
+  --code-text: theme('colors.stone.900');
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+/* ==========================================================================
+   PAPER & INK THEME (Dark) - Warm espresso tones
+   ========================================================================== */
+
+.dark,
+[data-theme='paper-ink-dark'] {
+  --background: theme('colors.stone.900');
+  /* Warm espresso */
+  --foreground: theme('colors.stone.50');
+  /* Warm off-white */
+  --surface: theme('colors.stone.700');
+  /* Slightly lighter espresso */
+  --surface-foreground: theme('colors.stone.50');
+
+  /* Interactive - Brighter terracotta for dark mode */
+  --primary: theme('colors.rose.400');
+  /* Brighter terracotta */
+  --primary-foreground: theme('colors.stone.50');
+  --secondary: theme('colors.emerald.500');
+  /* Brighter sage */
+  --secondary-foreground: theme('colors.stone.50');
+  --accent: theme('colors.rose.400');
+  --accent-foreground: theme('colors.stone.50');
+
+  /* UI elements */
+  --muted: theme('colors.stone.600');
+  --muted-foreground: theme('colors.stone.300');
+  --border: theme('colors.stone.700');
+  --input: theme('colors.stone.700');
+  --ring: theme('colors.rose.400');
+
+  /* Semantic */
+  --destructive: theme('colors.red.400');
+  --success: theme('colors.green.400');
+
+  /* Code blocks */
+  --code-bg: theme('colors.stone.700');
+  --code-text: theme('colors.stone.50');
 }
+
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  /* Smooth theme transitions */
+  html {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 }

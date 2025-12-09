@@ -23,10 +23,10 @@ function App() {
   }
 
   return (
-    <div className="h-screen bg-gray-900 text-white flex flex-col overflow-hidden">
-      <header className="p-4 border-b border-gray-700">
+    <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
+      <header className="p-4 border-b border-border">
         <h1 className="text-xl font-bold">Agent Chat</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-muted-foreground">
           {turns.length} turn{turns.length !== 1 ? 's' : ''} in conversation
         </p>
       </header>
@@ -34,7 +34,7 @@ function App() {
       <main className="flex-1 overflow-y-auto min-h-0 p-4">
         <div className="max-w-2xl mx-auto space-y-6">
           {turns.length === 0 && (
-            <div className="text-center text-gray-500 py-12">
+            <div className="text-center text-muted-foreground py-12">
               Send a message to start the conversation
             </div>
           )}
@@ -42,7 +42,7 @@ function App() {
           {turns.map((turn) => (
             <div key={turn.id} className="space-y-4">
               <div className="flex justify-end">
-                <div className="bg-blue-600 text-white px-4 py-2 rounded-lg max-w-md">
+                <div className="bg-primary text-primary-foreground px-4 py-2 rounded-lg max-w-md">
                   {turn.userMessage.content}
                 </div>
               </div>
@@ -54,8 +54,8 @@ function App() {
               </div>
 
               {turn.isStreaming && (
-                <div className="flex items-center gap-2 text-gray-400 text-sm">
-                  <div className="animate-spin h-4 w-4 border-2 border-gray-400 border-t-transparent rounded-full"></div>
+                <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                  <div className="animate-spin h-4 w-4 border-2 border-primary border-t-transparent rounded-full"></div>
                   Agent is responding...
                 </div>
               )}
@@ -64,7 +64,7 @@ function App() {
         </div>
       </main>
 
-      <footer className="flex-shrink-0 p-4 border-t border-gray-700">
+      <footer className="flex-shrink-0 p-4 border-t border-border">
         <div className="max-w-2xl mx-auto flex gap-2">
           <input
             type="text"
@@ -73,14 +73,14 @@ function App() {
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             disabled={isLoading}
-            className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 
-                       text-white placeholder-gray-400 focus:outline-none focus:border-blue-500
+            className="flex-1 bg-surface border border-border rounded-lg px-4 py-2 
+                       text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring
                        disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleSend}
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-medium
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2 rounded-lg font-medium
                        transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? '...' : 'Send'}
