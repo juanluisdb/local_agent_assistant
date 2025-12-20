@@ -18,13 +18,19 @@ class Agent:
     def _init_messages(
         self, user_input: str, messages: list[Message] | None = None
     ) -> list[Message]:
+        if messages is None:
+            messages = []
+
         if not messages:
-            messages = [Message(role="system", content=self.system_prompt)]
+            messages.append(Message(role="system", content=self.system_prompt))
+
         messages.append(Message(role="user", content=user_input))
         return messages
 
     async def run(self, user_input: str, messages: list[Message] | None = None):
         messages = self._init_messages(user_input, messages)
+
+        print(f"Running agent with messages: {messages}")
 
         while True:
             response = await litellm.acompletion(
