@@ -1,0 +1,24 @@
+{
+  "name": "agent",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "build": "bun run --filter '*' build",
+    "web:dev": "bun --cwd apps/web dev",
+    "api:dev": "bun --cwd apps/api dev"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^25.0.3",
+    "bun-types": "^1.3.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
