@@ -4,13 +4,16 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun --watch src/index.ts",
+    "dev": "bun --env-file=../../.env --watch src/index.ts",
     "start": "bun src/index.ts"
   },
   "dependencies": {
     "@langchain/core": "^1.1.7",
     "@langchain/langgraph": "^1.0.7",
-    "@shared/core": "workspace:*"
+    "@langchain/openai": "^1.2.0",
+    "@shared/core": "workspace:*",
+    "elysia": "^1.4.19",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@types/bun": "latest"
