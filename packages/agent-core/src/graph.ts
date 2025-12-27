@@ -1,5 +1,6 @@
 import { StateGraph } from "@langchain/langgraph";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
+import { MemorySaver } from "@langchain/langgraph";
 import { AgentStateAnnotation, type AgentState } from "./state";
 import { tools } from "./tools";
 import { createBaseModel } from "./model";
@@ -17,6 +18,11 @@ export const NODE = {
 } as const;
 
 export type NodeName = (typeof NODE)[keyof typeof NODE];
+
+/**
+ * In-memory checkpointer for persistence.
+ */
+const checkpointer = new MemorySaver();
 
 /**
  * Build and compile the agent graph for a specific request.
@@ -37,7 +43,7 @@ export function createAgentGraph(modelName: string = config.LLM_MODEL) {
         })
         .addEdge(NODE.TOOLS, NODE.AGENT);
 
-    return graph.compile();
+    return graph.compile({ checkpointer });
 }
 
 /**
