@@ -1,7 +1,6 @@
 import { HumanMessage } from "@langchain/core/messages";
 import { toUIMessageStream } from "@ai-sdk/langchain";
 import { createAgentGraph } from "./graph";
-import { prependDataToStream } from "./utils";
 
 /**
  * Executes the agent with the given message and returns a stream 
@@ -35,10 +34,6 @@ export async function streamAgentResponse(
     );
 
     // Convert to AI SDK UI Message Stream
-    const uiStream = toUIMessageStream(stream);
-
-    // Prepend default metadata (like threadId) ensuring client has context
-    return prependDataToStream(uiStream, {
-        threadId,
-    });
+    return toUIMessageStream(stream);
 }
+

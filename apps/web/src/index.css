@@ -1,68 +1,144 @@
+@import 'tailwindcss';
+
+/*
+ * Theme System - Paper & Ink
+ * --------------------------
+ * Warm, natural, pseudo-vintage modern theme
+ * Usage: Apply .dark class to <html> for dark mode
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tailwind v4 theme tokens */
+@theme inline {
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+
+    /* Core colors */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-surface-foreground: var(--surface-foreground);
+
+    /* Interactive */
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    /* UI elements */
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    /* Semantic */
+    --color-destructive: var(--destructive);
+    --color-success: var(--success);
+
+    /* Code blocks */
+    --color-code-bg: var(--code-bg);
+    --color-code-text: var(--code-text);
+}
+
+/* ==========================================================================
+   PAPER & INK THEME (Light)
+   ========================================================================== */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    --radius: 0.5rem;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    /* Backgrounds */
+    --background: theme('colors.stone.50');
+    --foreground: theme('colors.stone.900');
+    --surface: theme('colors.stone.200');
+    --surface-foreground: theme('colors.stone.900');
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+    /* Interactive - Terracotta accent */
+    --primary: theme('colors.rose.400');
+    --primary-foreground: theme('colors.white');
+    --secondary: theme('colors.emerald.500');
+    --secondary-foreground: theme('colors.white');
+    --accent: theme('colors.rose.400');
+    --accent-foreground: theme('colors.white');
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+    /* UI elements */
+    --muted: theme('colors.stone.300');
+    --muted-foreground: theme('colors.stone.700');
+    --border: theme('colors.stone.300');
+    --input: theme('colors.stone.50');
+    --ring: theme('colors.rose.400');
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+    /* Semantic */
+    --destructive: theme('colors.red.600');
+    --success: theme('colors.green.600');
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+    /* Code blocks */
+    --code-bg: theme('colors.stone.100');
+    --code-text: theme('colors.stone.900');
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* ==========================================================================
+   PAPER & INK THEME (Dark)
+   ========================================================================== */
+
+.dark {
+    --background: theme('colors.stone.900');
+    --foreground: theme('colors.stone.50');
+    --surface: theme('colors.stone.700');
+    --surface-foreground: theme('colors.stone.50');
+
+    /* Interactive */
+    --primary: theme('colors.rose.400');
+    --primary-foreground: theme('colors.stone.50');
+    --secondary: theme('colors.emerald.500');
+    --secondary-foreground: theme('colors.stone.50');
+    --accent: theme('colors.rose.400');
+    --accent-foreground: theme('colors.stone.50');
+
+    /* UI elements */
+    --muted: theme('colors.stone.600');
+    --muted-foreground: theme('colors.stone.300');
+    --border: theme('colors.stone.700');
+    --input: theme('colors.stone.700');
+    --ring: theme('colors.rose.400');
+
+    /* Semantic */
+    --destructive: theme('colors.red.400');
+    --success: theme('colors.green.400');
+
+    /* Code blocks */
+    --code-bg: theme('colors.stone.700');
+    --code-text: theme('colors.stone.50');
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* ==========================================================================
+   BASE STYLES
+   ========================================================================== */
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground antialiased;
+        font-family:
+            'Inter',
+            system-ui,
+            -apple-system,
+            sans-serif;
+    }
+
+    /* Smooth theme transitions */
+    html {
+        transition:
+            background-color 0.3s ease,
+            color 0.3s ease;
+    }
 }
